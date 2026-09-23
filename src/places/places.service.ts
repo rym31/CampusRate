@@ -17,12 +17,36 @@ export class PlacesService {
         this.filePath = this.configService.get<string>('PLACES_FILE_PATH')!;
     }
 
-    async findAll(): Promise<Place[]> {
+    private async readAllPlaces(): Promise<Place[]> {
         return this.jsonService.readData<Place>(this.filePath);
     }
 
+    async findAll(category?: string, page?: string, limit?: string) {
+        let places = await this.readAllPlaces();
+
+        if (category) {
+            places = places.filter((place) => place.category === category);
+        }
+
+        const pageNum = page ? parseInt(page, 10) : 1;
+        const limitNum = limit ? parseInt(limit, 10) : 10;
+        const totalItems = places.length;
+        const totalPages = Math.ceil(totalItems / limitNum);
+        const data = places.slice((pageNum - 1) * limitNum, pageNum * limitNum);
+
+        return {
+            data,
+            pagination: {
+                page: pageNum,
+                limit: limitNum,
+                totalItems,
+                totalPages,
+            },
+        };
+    }
+
     async findOne(id: string): Promise<Place> {
-        const places = await this.findAll();
+        const places = await this.readAllPlaces();
         const place = places.find((place) => place.id === id);
         if (!place) {
             throw new NotFoundException(`Place with id ${id} not found`);
@@ -41,7 +65,7 @@ export class PlacesService {
             createdAt: new Date(),
             updatedAt: new Date(),
         };
-        const places = await this.findAll();
+        const places = await this.readAllPlaces();
         places.push(newPlace);
         await this.jsonService.writeData(this.filePath, places);
         return newPlace;
@@ -51,7 +75,7 @@ export class PlacesService {
         id: string,
         updatePlaceDto: Partial<CreatePlaceDto>,
     ): Promise<Place> {
-        const places = await this.findAll();
+        const places = await this.readAllPlaces();
         const placeIndex = places.findIndex((place) => place.id === id);
         if (placeIndex === -1) {
             throw new NotFoundException(`Place with id ${id} not found`);
@@ -66,8 +90,9 @@ export class PlacesService {
         await this.jsonService.writeData(this.filePath, places);
         return updatedPlace;
     }
-async remove(id: string): Promise<void> {
-        const places = await this.findAll();
+
+    async remove(id: string): Promise<void> {
+        const places = await this.readAllPlaces();
         const place = places.find((p) => p.id === id);
         if (!place) {
             throw new NotFoundException(`Place with id ${id} not found`);
@@ -81,5 +106,4 @@ async remove(id: string): Promise<void> {
         const newPlaces = places.filter((p) => p.id !== id);
         await this.jsonService.writeData(this.filePath, newPlaces);
     }
-    
 }
