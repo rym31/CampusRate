@@ -79,7 +79,7 @@ export class PlacesController {
     description: 'Endroit introuvable.',
     type: ProblemDetailsDto,
   })
-  async update(@Param('id') id: string, @Body() body: any) {
+  async update(@Param('id') id: string, @Body() body: Partial<CreatePlaceDto>) {
     return this.placesService.update(id, body);
   }
 

@@ -1,0 +1,252 @@
+{
+  "info": {
+    "_postman_id": "4be04e6f-c67f-439b-b922-b5cf8783b223",
+    "name": "CampusRate",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48582910"
+  },
+  "item": [
+    {
+      "name": "Creer un endroit",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Bibliothèque principale\",\r\n    \"description\": \"Espace calme avec prises.\",\r\n    \"category\": \"LIBRARY\",\r\n    \"address\": \"Pavillon A, local A-210\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/places",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Creer une appreciation",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"authorName\": \"Samira\",\r\n    \"rating\": 4,\r\n    \"comment\": \"Calme et Wi-Fi stable.\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/places/1790207959539/reviews",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places",
+            "1790207959539",
+            "reviews"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consulter l'endroit et son appréciation",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/places/1790207959539",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places",
+            "1790207959539"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modifier partiellement l'endroit",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\": \"TEMPORARILY_CLOSED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/places/1790207959539",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places",
+            "1790207959539"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Erreur problem details",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"authorName\": \"Test\",\r\n    \"rating\": 10,\r\n    \"comment\": \"Test\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/places/1790207959539/reviews",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places",
+            "1790207959539",
+            "reviews"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consulter un endroit inexistant",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/places/1790207959539",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places",
+            "1790207959539"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Supprimer l'endroit qui a une appréciation",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/places/1790207959539",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places",
+            "1790207959539"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Filtre et pagination",
+      "request": {
+        "auth": {
+          "type": "inherit"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/places?category=LIBRARY&page=1&limit=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "places"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "LIBRARY",
+              "sortOrder": 0
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "sortOrder": 1
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "sortOrder": 2
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

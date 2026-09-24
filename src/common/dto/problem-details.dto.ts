@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 export class ProblemDetailsDto {
   @ApiProperty({ description: 'Type de problème', example: 'about:blank' })
   type!: string;
