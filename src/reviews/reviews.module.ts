@@ -6,6 +6,6 @@ import { JsonService } from 'src/json.service';
 @Module({
   controllers: [ReviewsController],
   providers: [ReviewsService, JsonService],
-  exports: [ReviewsService]
+  exports: [ReviewsService],
 })
 export class ReviewsModule {}
