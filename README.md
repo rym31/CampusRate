@@ -34,7 +34,8 @@ $ npm i
 Copier .env.example dans .env et ajuster au besoin :
 
 - PORT= le port sur lequel l'API sera accessible (par défaut 3000)
-- DATA_FILE_PATH= le chemin vers le fichier de données
+- PLACES_FILE_PATH= le chemin vers le fichier de données
+- REVIEWS_FILE_PATH= le chemin vers le fichier de données
 
 ## Démarrage
 ```
