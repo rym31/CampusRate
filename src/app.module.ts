@@ -6,7 +6,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PlacesModule } from './places/places.module';
 import { ReviewsModule } from './reviews/reviews.module';
-import { JsonService } from './json.service';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -36,6 +35,6 @@ import databaseConfig from './config/database.config';
     ReviewsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JsonService],
+  providers: [AppService],
 })
 export class AppModule {}

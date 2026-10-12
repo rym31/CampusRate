@@ -53,7 +53,7 @@ export class PlacesController {
   })
   async create(@Body() body: CreatePlaceDto, @Res() res: Response) {
     const newPlace = await this.placesService.create(body);
-    res.setHeader('Location', `/v1/places/${newPlace.id}`);
+    res.setHeader('Location', `/v1/places/${newPlace._id.toString()}`);
     res.status(HttpStatus.CREATED).json(newPlace);
   }
 
