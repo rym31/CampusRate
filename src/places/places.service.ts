@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CreatePlaceDto } from './dto/create-place.dto';
+import { UpdatePlaceDto } from './dto/update-place.dto';
 import { Category, Place, Status } from './entities/place.entity';
 import { JsonService } from '../json.service';
 import { ReviewsService } from '../reviews/reviews.service';
@@ -77,10 +78,7 @@ export class PlacesService {
     return newPlace;
   }
 
-  async update(
-    id: string,
-    updatePlaceDto: Partial<CreatePlaceDto>,
-  ): Promise<Place> {
+  async update(id: string, updatePlaceDto: UpdatePlaceDto): Promise<Place> {
     const places = await this.readAllPlaces();
     const placeIndex = places.findIndex((place) => place.id === id);
     if (placeIndex === -1) {

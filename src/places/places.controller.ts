@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Delete,
+  HttpCode,
   HttpStatus,
   Res,
   Query,
@@ -24,6 +25,7 @@ import {
 } from '@nestjs/swagger';
 import { PlacesService } from './places.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
+import { UpdatePlaceDto } from './dto/update-place.dto';
 import { ProblemDetailsDto } from '../common/dto/problem-details.dto';
 
 @ApiTags('Places')
@@ -79,11 +81,12 @@ export class PlacesController {
     description: 'Endroit introuvable.',
     type: ProblemDetailsDto,
   })
-  async update(@Param('id') id: string, @Body() body: Partial<CreatePlaceDto>) {
+  async update(@Param('id') id: string, @Body() body: UpdatePlaceDto) {
     return this.placesService.update(id, body);
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Supprimer un endroit' })
   @ApiParam({ name: 'id', description: "Identifiant de l'endroit" })
   @ApiNoContentResponse({ description: 'Endroit supprimé' })

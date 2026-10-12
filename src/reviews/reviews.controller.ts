@@ -21,6 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { UpdateReviewDto } from './dto/update-review.dto';
 import { ProblemDetailsDto } from '../common/dto/problem-details.dto';
 
 @ApiTags('Reviews')
@@ -80,10 +81,7 @@ export class ReviewsController {
     description: 'Appréciation introuvable',
     type: ProblemDetailsDto,
   })
-  async update(
-    @Param('id') id: string,
-    @Body() body: Partial<CreateReviewDto>,
-  ) {
+  async update(@Param('id') id: string, @Body() body: UpdateReviewDto) {
     return this.reviewsService.update(id, body);
   }
 

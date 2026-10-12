@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JsonService } from '../json.service';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { UpdateReviewDto } from './dto/update-review.dto';
 import { Review } from './entities/review.entity';
 
 @Injectable()
@@ -47,7 +48,7 @@ export class ReviewsService {
     return newReview;
   }
 
-  async update(id: string, dto: Partial<CreateReviewDto>): Promise<Review> {
+  async update(id: string, dto: UpdateReviewDto): Promise<Review> {
     const reviews = await this.findAll();
     const reviewIndex = reviews.findIndex((review) => review.id === id);
     if (reviewIndex === -1) {
