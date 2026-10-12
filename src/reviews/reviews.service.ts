@@ -1,33 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JsonService } from '../json.service';
+import { ReviewsRepository } from './reviews.repository';
+import { PlacesService } from '../places/places.service';
+import { PlacesRepository } from '../places/places.repository';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
-import { Review } from './entities/review.entity';
+import { Review } from './schemas/review.schema';
 
 @Injectable()
 export class ReviewsService {
-  private readonly filePath: string;
-
   constructor(
-    private jsonService: JsonService,
-    private configService: ConfigService,
-  ) {
-    this.filePath = this.configService.get<string>('REVIEWS_FILE_PATH')!;
-  }
-
-  async findAll(): Promise<Review[]> {
-    return this.jsonService.readData<Review>(this.filePath);
-  }
+    private readonly reviewsRepository: ReviewsRepository,
+    private readonly placesService: PlacesService,
+    private readonly placesRepository: PlacesRepository,
+  ) {}
 
   async findAllByPlace(placeId: string): Promise<Review[]> {
-    const reviews = await this.findAll();
-    return reviews.filter((review) => review.placeId === placeId);
+    return this.reviewsRepository.findAllByPlace(placeId);
   }
 
   async findOne(id: string): Promise<Review> {
-    const reviews = await this.findAll();
-    const review = reviews.find((review) => review.id === id);
+    const review = await this.reviewsRepository.findById(id);
     if (!review) {
       throw new NotFoundException(`Review with id ${id} not found`);
     }
@@ -35,41 +27,36 @@ export class ReviewsService {
   }
 
   async create(placeId: string, dto: CreateReviewDto): Promise<Review> {
-    const newReview: Review = {
-      ...dto,
-      id: Date.now().toString(),
+    await this.placesService.findOne(placeId); // 404 si l'endroit n'existe pas
+    const review = await this.reviewsRepository.create({
       placeId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    const reviews = await this.findAll();
-    reviews.push(newReview);
-    await this.jsonService.writeData(this.filePath, reviews);
-    return newReview;
+      authorName: dto.authorName,
+      rating: dto.rating,
+      comment: dto.comment,
+    });
+    await this.refreshPlaceStats(placeId);
+    return review;
   }
 
   async update(id: string, dto: UpdateReviewDto): Promise<Review> {
-    const reviews = await this.findAll();
-    const reviewIndex = reviews.findIndex((review) => review.id === id);
-    if (reviewIndex === -1) {
+    const review = await this.reviewsRepository.updateById(id, dto);
+    if (!review) {
       throw new NotFoundException(`Review with id ${id} not found`);
     }
-    const updatedReview = {
-      ...reviews[reviewIndex],
-      ...dto,
-      updatedAt: new Date(),
-    };
-    reviews[reviewIndex] = updatedReview;
-    await this.jsonService.writeData(this.filePath, reviews);
-    return updatedReview;
+    await this.refreshPlaceStats(review.placeId);
+    return review;
   }
 
   async remove(id: string): Promise<void> {
-    const reviews = await this.findAll();
-    const newReviews = reviews.filter((review) => review.id !== id);
-    if (newReviews.length === reviews.length) {
+    const review = await this.reviewsRepository.deleteById(id);
+    if (!review) {
       throw new NotFoundException(`Review with id ${id} not found`);
     }
-    await this.jsonService.writeData(this.filePath, newReviews);
+    await this.refreshPlaceStats(review.placeId);
+  }
+
+  private async refreshPlaceStats(placeId: string): Promise<void> {
+    const stats = await this.reviewsRepository.computeStats(placeId);
+    await this.placesRepository.updateById(placeId, stats);
   }
 }

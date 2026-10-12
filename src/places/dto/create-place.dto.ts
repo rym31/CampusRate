@@ -1,4 +1,4 @@
-import { Category, Status } from '../entities/place.entity';
+import { Category, Status } from '../place.enums';
 import {
   IsNotEmpty,
   IsString,
