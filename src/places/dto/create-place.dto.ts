@@ -5,10 +5,12 @@ import {
   IsEnum,
   IsOptional,
   IsArray,
+  MaxLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePlaceDto {
+  @MaxLength(100)
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -16,7 +18,7 @@ export class CreatePlaceDto {
     example: 'Bibliothèque principale',
   })
   name!: string;
-
+  @MaxLength(1000)
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -34,6 +36,7 @@ export class CreatePlaceDto {
   })
   category!: Category;
 
+  @MaxLength(200)
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -44,6 +47,7 @@ export class CreatePlaceDto {
 
   @IsOptional()
   @IsArray()
+  @IsString({ each: true })
   @ApiPropertyOptional({
     description: "Services offerts par l'endroit",
     example: ['WIFI', 'POWER_OUTLETS', 'STUDY_ROOMS'],
