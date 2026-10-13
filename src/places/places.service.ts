@@ -58,7 +58,15 @@ export class PlacesService {
   }
 
   async update(id: string, dto: UpdatePlaceDto): Promise<Place> {
-    const place = await this.placesRepository.updateById(id, dto);
+    const changes: Partial<Place> = {};
+    if (dto.name !== undefined) changes.name = dto.name;
+    if (dto.description !== undefined) changes.description = dto.description;
+    if (dto.category !== undefined) changes.category = dto.category;
+    if (dto.address !== undefined) changes.address = dto.address;
+    if (dto.services !== undefined) changes.services = dto.services;
+    if (dto.status !== undefined) changes.status = dto.status;
+
+    const place = await this.placesRepository.updateById(id, changes);
     if (!place) {
       throw new NotFoundException(`Place with id ${id} not found`);
     }

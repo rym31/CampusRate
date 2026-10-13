@@ -39,7 +39,12 @@ export class ReviewsService {
   }
 
   async update(id: string, dto: UpdateReviewDto): Promise<Review> {
-    const review = await this.reviewsRepository.updateById(id, dto);
+    const changes: Partial<Review> = {};
+    if (dto.authorName !== undefined) changes.authorName = dto.authorName;
+    if (dto.rating !== undefined) changes.rating = dto.rating;
+    if (dto.comment !== undefined) changes.comment = dto.comment;
+
+    const review = await this.reviewsRepository.updateById(id, changes);
     if (!review) {
       throw new NotFoundException(`Review with id ${id} not found`);
     }
