@@ -47,6 +47,13 @@ export class PlacesService {
   }
 
   async create(dto: CreatePlaceDto): Promise<Place> {
+    const existing = await this.placesRepository.findByAddress(dto.address);
+    if (existing) {
+      throw new ConflictException(
+        `A place already exists at address ${dto.address}`,
+      );
+    }
+
     return this.placesRepository.create({
       name: dto.name,
       description: dto.description,
