@@ -14,6 +14,7 @@ export class CreateReviewDto {
   @ApiProperty({
     description: "Nom de l'auteur de l'appréciation",
     example: 'Samira',
+    maxLength: 50,
   })
   authorName!: string;
 
@@ -21,7 +22,13 @@ export class CreateReviewDto {
   @IsInt()
   @Min(1)
   @Max(5)
-  @ApiProperty({ description: "Note de l'appréciation (1 à 5)", example: 4 })
+  @ApiProperty({
+    description: "Note de l'appréciation (1 à 5)",
+    example: 4,
+    type: 'integer',
+    minimum: 1,
+    maximum: 5,
+  })
   rating!: number;
 
   @IsNotEmpty()
@@ -30,6 +37,7 @@ export class CreateReviewDto {
   @ApiProperty({
     description: "Commentaire de l'appréciation",
     example: 'Calme et Wi-Fi stable.',
+    maxLength: 1000,
   })
   comment!: string;
 }

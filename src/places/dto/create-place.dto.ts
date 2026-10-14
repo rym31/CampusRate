@@ -16,6 +16,7 @@ export class CreatePlaceDto {
   @ApiProperty({
     description: "Nom de l'endroit",
     example: 'Bibliothèque principale',
+    maxLength: 100,
   })
   name!: string;
   @MaxLength(1000)
@@ -24,6 +25,7 @@ export class CreatePlaceDto {
   @ApiProperty({
     description: "Description de l'endroit",
     example: 'Espace calme avec prises.',
+    maxLength: 1000,
   })
   description!: string;
 
@@ -42,6 +44,7 @@ export class CreatePlaceDto {
   @ApiProperty({
     description: "Adresse de l'endroit",
     example: 'Pavillon A, local A-210',
+    maxLength: 200,
   })
   address!: string;
 

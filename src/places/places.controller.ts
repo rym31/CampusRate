@@ -15,6 +15,7 @@ import type { Response } from 'express';
 import {
   ApiTags,
   ApiOperation,
+  ApiQuery,
   ApiParam,
   ApiOkResponse,
   ApiCreatedResponse,
@@ -36,6 +37,9 @@ export class PlacesController {
   @Get()
   @ApiOperation({ summary: 'Lister les endroits' })
   @ApiOkResponse({ description: 'Liste des endroits' })
+  @ApiQuery({ name: 'category', required: false })
+  @ApiQuery({ name: 'page', required: false, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, example: 10 })
   async findAll(
     @Query('category') category?: string,
     @Query('page') page?: string,
