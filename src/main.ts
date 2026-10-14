@@ -6,6 +6,7 @@ import { configureSwagger } from './configure-swagger';
 import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { ExecutionTimeInterceptor } from './common/interceptors/execution-time.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,6 +33,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new ExecutionTimeInterceptor());
   configureSwagger(app);
   await app.listen(process.env.PORT ?? 3000);
 }
