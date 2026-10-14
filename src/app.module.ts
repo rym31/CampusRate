@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { PlacesModule } from './places/places.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import databaseConfig from './config/database.config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -32,10 +34,16 @@ import databaseConfig from './config/database.config';
         autoIndex: configService.get<string>('NODE_ENV') !== 'production',
       }),
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60_000,
+        limit: 10,
+      },
+    ]),
     PlacesModule,
     ReviewsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
 export class AppModule {}
