@@ -21,6 +21,7 @@ import databaseConfig from './config/database.config';
         MONGO_URI: Joi.string()
           .uri({ scheme: ['mongodb', 'mongodb+srv'] })
           .required(),
+        CORS_ORIGINS: Joi.string().required(),
       }),
     }),
     MongooseModule.forRootAsync({
