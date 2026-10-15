@@ -7,8 +7,10 @@ import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ExecutionTimeInterceptor } from './common/interceptors/execution-time.interceptor';
+import mongoose from 'mongoose';
 
 async function bootstrap() {
+  mongoose.set('sanitizeFilter', true);
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 

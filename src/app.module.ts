@@ -10,6 +10,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
+import { ContentTypeMiddleware } from './common/middleware/content-type.middleware';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { RequestLoggerMiddleware } from './common/middleware/request-logger.midd
     ThrottlerModule.forRoot([
       {
         ttl: 60_000,
-        limit: 10,
+        limit: 100,
       },
     ]),
     PlacesModule,
@@ -49,6 +50,6 @@ import { RequestLoggerMiddleware } from './common/middleware/request-logger.midd
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+    consumer.apply(RequestLoggerMiddleware,ContentTypeMiddleware).forRoutes('*');
   }
 }
