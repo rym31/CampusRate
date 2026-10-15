@@ -7,6 +7,313 @@
   },
   "item": [
     {
+      "name": "TP2",
+      "item": [
+        {
+          "name": "Créer un endroit valide",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('placeId', pm.response.json().id);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Bibliothèque principale\",\r\n  \"description\": \"Espace calme avec prises.\",\r\n  \"category\": \"LIBRARY\",\r\n  \"address\": \"Pavillon A, local A-210\",\r\n  \"services\": [\"WIFI\", \"POWER_OUTLETS\"]\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Créer une review valide",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('reviewId', pm.response.json().id);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"authorName\": \"Samira\", \"rating\": 4, \"comment\": \"Calme et Wi-Fi stable.\" }\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places/{{placeId}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places",
+                "{{placeId}}",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Demo",
+      "item": [
+        {
+          "name": "1.Creation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('placeId', pm.response.json().id);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Salle d'étude\",\r\n  \"description\": \"Salle calme.\",\r\n  \"category\": \"STUDY_SPACE\",\r\n  \"address\": \"Pavillon C, local C-300\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.Consultation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/places/{{placeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places",
+                "{{placeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.Consultation redemarrage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/places/{{placeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places",
+                "{{placeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.Props obligatoire",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"description\": \"Salle calme.\",\r\n  \"category\": \"STUDY_SPACE\",\r\n  \"address\": \"Pavillon D, local D-400\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.Valeur invalide",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Salle d'étude\",\r\n  \"description\": \"Salle calme.\",\r\n  \"category\": \"PIZZA\",\r\n  \"address\": \"Pavillon D, local D-400\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6.Propriété inconnue",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Salle d'étude\",\r\n  \"description\": \"Salle calme.\",\r\n  \"category\": \"STUDY_SPACE\",\r\n  \"address\": \"Pavillon D, local D-400\",\r\n  \"peace\": 1\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7.Modification valide",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Grande salle d'étude\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places/{{placeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places",
+                "{{placeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8.Modification d'un champs",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"averageRating\": 5 }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/places/{{placeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "places",
+                "{{placeId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Creer un endroit",
       "request": {
         "auth": {
@@ -247,6 +554,23 @@
         }
       },
       "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "\thttp://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "placeId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reviewId",
+      "value": "",
+      "type": "string"
     }
   ]
 }
