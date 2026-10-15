@@ -58,6 +58,9 @@ $ npm run lint
 $ npm run build
 ```
 
+## Vidéo de démonstration
+
+Démonstration des scénarios de vérification du TP2 : [Voir la vidéo](https://youtu.be/vmtMpLCG7Kc)
 
 
 
