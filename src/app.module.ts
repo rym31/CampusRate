@@ -1,4 +1,3 @@
-import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
@@ -7,6 +6,11 @@ import { AppService } from './app.service';
 import { PlacesModule } from './places/places.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import databaseConfig from './config/database.config';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
+import { ContentTypeMiddleware } from './common/middleware/content-type.middleware';
 
 @Module({
   imports: [
@@ -32,10 +36,20 @@ import databaseConfig from './config/database.config';
         autoIndex: configService.get<string>('NODE_ENV') !== 'production',
       }),
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60_000,
+        limit: 100,
+      },
+    ]),
     PlacesModule,
     ReviewsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware,ContentTypeMiddleware).forRoutes('*');
+  }
+}

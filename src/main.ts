@@ -5,12 +5,17 @@ import { HttpExceptionFilter } from './common/http-exception.filter';
 import { configureSwagger } from './configure-swagger';
 import helmet from 'helmet';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { ExecutionTimeInterceptor } from './common/interceptors/execution-time.interceptor';
+import mongoose from 'mongoose';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  mongoose.set('sanitizeFilter', true);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
   app.use(helmet());
+  app.useBodyParser('json', { limit: '5kb' });
 
   app.enableCors({
     origin: configService.get<string>('CORS_ORIGINS', '').split(','),
@@ -30,6 +35,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new ExecutionTimeInterceptor());
   configureSwagger(app);
   await app.listen(process.env.PORT ?? 3000);
 }

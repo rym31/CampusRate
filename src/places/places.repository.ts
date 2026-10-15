@@ -22,6 +22,10 @@ export class PlacesRepository {
     return this.placeModel.findById(id).exec();
   }
 
+    findByAddress(address: string) {
+    return this.placeModel.findOne({ address }).exec();
+  }
+
   create(data: Partial<Place>) {
     return this.placeModel.create(data);
   }

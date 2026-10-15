@@ -14,7 +14,7 @@ export class Place extends Document {
   @Prop({ required: true, enum: Category })
   category!: Category;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   address!: string;
 
   @Prop({ type: [String], default: [] })
