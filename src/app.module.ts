@@ -50,6 +50,8 @@ import { ContentTypeMiddleware } from './common/middleware/content-type.middlewa
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware,ContentTypeMiddleware).forRoutes('*');
+    consumer
+      .apply(RequestLoggerMiddleware, ContentTypeMiddleware)
+      .forRoutes('*');
   }
 }

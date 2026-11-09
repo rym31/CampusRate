@@ -22,7 +22,7 @@ export class PlacesRepository {
     return this.placeModel.findById(id).exec();
   }
 
-    findByAddress(address: string) {
+  findByAddress(address: string) {
     return this.placeModel.findOne({ address }).exec();
   }
 
